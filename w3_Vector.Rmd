@@ -1,0 +1,449 @@
+---
+title: "w3_Vector"
+author: "Amy Yi-Ting Lu"
+date: "9/17/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Vector Basic
+
+```{r}
+
+x <- c(1, 2, 10)
+
+typeof(x)
+
+## double means number can be with decimal point while integer can only be 1, 2, or 4...etc
+
+```
+
+Need to load the tidyverse for "is_" function
+
+```{r}
+
+library(tidyverse)
+
+is_double(x) ## return TRUE
+is_double("hello") ## it is not double so it returns fault
+
+```
+
+Follow numbers by "L" to specify an integer
+
+```{r}
+
+x <- c(1L, 2L, 10L)
+
+is_double(x)
+typeof(x)
+
+```
+
+
+```{r}
+
+two <- sqrt(2) ^2
+two
+
+typeof(two)
+two == 2 ## this 2 is actually just a run up of 2 (very close to 2)
+
+```
+
+```{r}
+
+y <- c("2", "hello", "two")
+
+typeof(y)
+
+is_character(y)
+
+```
+
+```{r}
+
+fvec <- parse_factor(c("A", "B", "A", "B", "C"))
+fvec
+
+
+typeof(fvec)
+attributes(fvec)
+
+
+```
+
+Create a name vector by having the name to the left of an equal sign and the value to the right
+
+```{r}
+
+name_vec <- c(horse = 7, man = 1, dog = 8)
+name_vec
+typeof(name_vec)
+
+```
+
+Extract these name using 'names()' function
+
+```{r}
+
+names(name_vec)
+
+
+```
+
+Also use 'names' function to change the names of an observation
+
+```{r}
+
+names(name_vec)[1] <- "cat"
+name_vec
+
+```
+
+You can extract elements using names
+```{r}
+
+name_vec["cat"]
+
+```
+
+OTher ways to subset: specifying the indice of the lcoation of the observations:
+
+```{r}
+
+x <- c("I", "like", "dogs")
+x[2:3]
+x[c(2:3)]
+x[c(1,3)]
+
+```
+
+You can specify subeets with logicals vector of the same length as the vector you want to subset. Wherever a True occures, you extra element.
+
+```{r}
+
+lvec <- c(TRUE, FALSE, TRUE) 
+x[lvec]
+
+```
+
+You can overwrite elements through subsetting
+
+```{r}
+
+name_vec
+
+name_vec["cate"] <- 10
+
+name_vec
+
+name_vec[1] <- 0
+
+name_vec
+
+name_vec[c(TRUE, FALSE, FALSE, TRUE)] <- 5
+
+name_vec
+```
+
+YOu can use negative indices to subset a vector. The negative elements are the ones that are NOT extracted.
+
+```{r}
+
+name_vec[-3]
+name_vec[c(-1, -3)]
+
+
+```
+
+Use [[]] to extract a single element (ex without the name)
+
+```{r}
+
+name_vec[1]
+name_vec[[1]]
+name_vec[["cat"]]
+
+```
+
+Extract individual names with names function
+
+```{r}
+
+names(name_vec[1])
+
+```
+
+## Exercise
+
+```{r}
+
+x <- c(Yoshi = 10L,
+       Mario = 31L,
+       Luigi = 72L,
+       Peach = 11L,
+       Toad  = 38L)
+
+x[c(1, 4)]
+
+x[c(-2:-3,-5)]
+#OR
+x[-c(2:3,5)]
+
+x[c(TRUE, FALSE, FALSE, TRUE, FALSE)]
+
+x[c("Yoshi", "Peach")]
+
+x [ x %in% c(10,11)]## when want to use corresponding number to call out the elements
+
+
+```
+
+## Exercise
+
+```{r}
+
+x["Yoshi"] <- 19L
+x
+
+x[1] <- 19L
+
+#or
+
+x <- x[sample(1:5)]
+x
+
+```
+
+# Recycling vectors
+
+```{r}
+
+x <- c(1, 1, 4, 5, 12)
+x +10
+
+
+
+```
+
+Interally, R is "recycling" 10 to be the same length as x
+
+```{r}
+
+x + c(10, 10, 10,10, 10)
+
+```
+
+You can "recycle" vectors of lengths greater than 1
+
+```{r}
+
+x
+
+x + c(10,5)
+
+
+```
+
+Internally, R is 
+
+```{r}
+
+x + c(10, 5, 10, 5, 10)
+
+```
+
+# List
+
+Use 'list" function to create a list
+
+```{r}
+
+my_first_list <- list(x = "a", y = 1, z = c(1L, 2L, 3L), list("a", 1))
+
+my_first_list
+
+```
+
+Usually you use the 'str' function to peak at a vector "structure"
+
+```{r}
+
+str(my_first_list) # more information compare to the first list shown above
+
+```
+
+
+YOu can use single bracket to create a sublist, but it will still be a list, not the individual elements
+
+```{r}
+
+my_first_list[1] # with name x with value a
+
+my_first_list[c(1,3)]
+
+my_first_list[c(-1,-3)]
+
+my_first_list["y"]
+
+```
+
+Use [[]] to extrac individual elements that are not lists
+
+```{r}
+
+my_first_list[[1]] ## it will get value a instead of "x" with "a"
+
+```
+
+```{r}
+
+data.frame( x = c(1,2,3), y = c(1,2,3)) -> dftemp
+
+dftemp
+dftemp[, 1] # do this without tible will change the data frame type
+
+as_tibble(dftemp) -> tibtemp
+tibtemp[, 1]
+
+```
+
+Use $ to extract individual elements (just like in a data frame). Will not be a list
+
+```{r}
+
+my_first_list$y
+my_first_list$x
+
+```
+
+You can change values through assignment just like in vectorsL
+
+```{r}
+
+my_first_list$x
+
+my_first_list$x <- "b"
+
+str(my_first_list)
+
+```
+
+You can remove elements from a list by setting their values to NULL
+
+```{r}
+
+my_first_list$x <- NULL
+str(my_first_list) # then x will be removed, not shown
+
+```
+
+## Exercise
+
+```{r}
+
+wedding <- list(venue = "chick-fil-a",
+                guest = tribble(~name,     ~meal, ~age,
+                                ##--------/------/-----
+                                "Yoshi",   "V",   29L,
+                                "Wario",   "C",   27L,
+                                "Bowser",  "V",   34L,
+                                "Luigi",   "C",   36L,
+                                "Toad",    "B",   34L), 
+                bride = "Peach",
+                groom = "Mario",
+                date  = parse_date("11/10/2020", "%d/%m/%Y"))
+
+
+
+```
+
+a.
+```{r}
+
+wedding$guest%>%
+  filter(name != "Wario") -> wedding$guest
+
+wedding$guest
+
+```
+
+b.
+```{r}
+
+wedding$meal <- c(v = "Veg",
+                  c = "Chicken",
+                  B = "Beef")
+
+wedding$meal
+
+```
+
+c.
+
+```{r}
+
+data.frame(wedding)[1]
+
+wedding$venue
+
+wedding[1]
+
+--------------------------
+
+wedding$venue
+wedding$date
+
+names(wedding)
+wedding[c(1,5)]
+wedding[c("venue", "date")]
+wedding[c(TRUE, FALSE, FALSE, FALSE, FALSE, TRUE)]
+
+
+```
+
+d.
+
+```{r}
+
+
+str_to_sentence(wedding$venue)
+str_replace(wedding$venue, "^c", "C") -> wedding$venue
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
